@@ -19,6 +19,6 @@ def mp3_to_samples(path):
 
     path = Path(path)
     
-    recorded_audio, _ = librosa.load("data/BP_ET_minor.ogg", sr=SAMPLING_RATE, mono=True)
+    recorded_audio, _ = librosa.load(path, sr=SAMPLING_RATE, mono=True)
 
     return recorded_audio
