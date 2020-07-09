@@ -4,9 +4,8 @@ import matplotlib.mlab as mlab
 
 
 def audio_to_spectogram(sampling_rate, audio):
-    fig, ax = plt.subplots()
 
-    Spectrum, freqs, midpoint_times, image = ax.specgram(audio,
+    Spectrum, freqs, midpoint_times = mlab.specgram(audio,
                                             NFFT=4096, 
                                             Fs=sampling_rate, 
                                             noverlap=4096 // 2, # number points of overlap between blocks. 
