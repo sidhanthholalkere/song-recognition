@@ -1,21 +1,26 @@
-# storing fingerprint
-# querying fingerprint
-song_database = SongDatabase()
 # a SongDatabase has a dictionary called fingerprints, and a list of songs.
 # fingerprints stores fingerprint as key and song ID as the value
 # the song ID corresponds to a song in the song list
 
+# song_database example: { (fm, fn, dt) : [(song_id, tm), (), () ...] }
 
-def store_fingerprint(fingerprints, song_id):
+
+song_database = SongDatabase()
+
+
+def store_fingerprint(fingerprints, song_name):
     """
     takes a list of fingerprints of a song and the song's ID, adds the prints and ID to database
     Parameters
     ----------
         fingerprints : List[Tuple(float, float, float)]
             list of freq of initial peak, freq of peak fanned out to, time gap between peaks
-        song_id : str
-            ID of song the fingerprints are taken from
+        song_name : str
+            name of song the fingerprints are taken from
     """
+    song_database.songs.append(song_name)
+    song_id = song_database.songs.index(song_name)
+
     for (fm, fn, dt), tm in fingerprints:
         if (fm, fn, dt) not in song_database.fingerprints:
             song_database.fingerprints[(fm, fn, dt)] = [(song_id, tm)]
@@ -46,10 +51,10 @@ def query_fingerprint(fingerprint):
                 tally[(song_id, t_offset)] += 1
             else:
                 tally[(song_id, t_offset)] = 1
-        sorted_tally = sorted(tally.items(), key=lambda kv: kv[1])
-        return song_database.songs[sorted_tally[-1[0]]]             # sorted_tally is a list of tuples in order of
-                                                                    # tallies, from least to greatest. sorted_tally[-1[0]]
-                                                                    # gives the song ID of the song w greatest # of tallies
-                                                                    # which you then look up in the database's song list for the name
+        # sorted_tally is a list of tuples in order of tallies, from greatest to least [( (songID, t_off), tally ), ...]
+        # sorted_tally[0[0]] gives the song ID of the song w greatest # of tallies
+        # pass this to song_database.songs to retrieve the song name
+        sorted_tally = sorted(tally.items(), key=lambda kv: kv[1], reverse=True)
+        return song_database.songs[sorted_tally[0[0]]]
     else:
         return 'not in database'
