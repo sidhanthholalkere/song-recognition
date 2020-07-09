@@ -10,7 +10,7 @@ def audio_to_spectogram(sampling_rate, audio):
                                             Fs=sampling_rate, 
                                             noverlap=4096 // 2, # number points of overlap between blocks. 
                                             mode='magnitude', #returns the magnitude spectrum
-                                            scale="dB" #returns the values in dB scale
+                                            
                                             ) 
                                             
                                              
