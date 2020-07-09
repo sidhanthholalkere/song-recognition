@@ -1,6 +1,9 @@
 # storing fingerprint
 # querying fingerprint
-song_database = dict()
+song_database = SongDatabase()
+# a SongDatabase has a dictionary called fingerprints, and a list of songs.
+# fingerprints stores fingerprint as key and song ID as the value
+# the song ID corresponds to a song in the song list
 
 
 def store_fingerprint(fingerprints, song_id):
@@ -14,10 +17,10 @@ def store_fingerprint(fingerprints, song_id):
             ID of song the fingerprints are taken from
     """
     for (fm, fn, dt), tm in fingerprints:
-        if (fm, fn, dt) not in song_database:
-            song_database[(fm, fn, dt)] = [(song_id, tm)]
+        if (fm, fn, dt) not in song_database.fingerprints:
+            song_database.fingerprints[(fm, fn, dt)] = [(song_id, tm)]
         else:
-            song_database[(fm, fn, dt)].append((song_id, tm))
+            song_database.fingerprints[(fm, fn, dt)].append((song_id, tm))
 
 
 def query_fingerprint(fingerprint):
@@ -34,8 +37,8 @@ def query_fingerprint(fingerprint):
     """
     t_rel = fingerprint[-1]
 
-    if fingerprint in song_database:
-        poss_songs = song_database[fingerprint]
+    if fingerprint in song_database.fingerprints:
+        poss_songs = song_database.fingerprints[fingerprint]
         tally = dict()
         for song_id, t_abs in poss_songs:
             t_offset = t_abs - t_rel
@@ -44,6 +47,9 @@ def query_fingerprint(fingerprint):
             else:
                 tally[(song_id, t_offset)] = 1
         sorted_tally = sorted(tally.items(), key=lambda kv: kv[1])
-        return sorted_tally[0[0]]
+        return song_database.songs[sorted_tally[-1[0]]]             # sorted_tally is a list of tuples in order of
+                                                                    # tallies, from least to greatest. sorted_tally[-1[0]]
+                                                                    # gives the song ID of the song w greatest # of tallies
+                                                                    # which you then look up in the database's song list for the name
     else:
         return 'not in database'
