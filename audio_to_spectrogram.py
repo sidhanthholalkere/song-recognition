@@ -4,7 +4,8 @@ import matplotlib.mlab as mlab
 
 
 def audio_to_spectogram(sampling_rate, audio):
-    
+    fig, ax = plt.subplots()
+
     Spectrum, freqs, midpoint_times, image = ax.specgram(audio,
                                             NFFT=4096, 
                                             Fs=sampling_rate) #sampling frequency
