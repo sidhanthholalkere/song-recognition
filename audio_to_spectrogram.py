@@ -3,12 +3,11 @@ import matplotlib.pyplot as plt
 import matplotlib.mlab as mlab
 
 
-def audio_to_spectogram():
-    def audio_to_spectogram(sampling_rate, audio):
+def audio_to_spectogram(sampling_rate, audio):
     
     Spectrum, freqs, midpoint_times, image = ax.specgram(audio,
-                                             NFFT=4096, # num data points each block for the FFT.
-                                             Fs=sampling_rate) #sampling frequency
+                                            NFFT=4096, 
+                                            Fs=sampling_rate) #sampling frequency
                                             
                                              
                                             
@@ -16,7 +15,6 @@ def audio_to_spectogram():
 
 
     """
-    Parameters
     ----------
     sampling_rate : int, 
     the sampling rate
