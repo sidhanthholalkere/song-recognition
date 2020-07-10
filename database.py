@@ -1,5 +1,6 @@
 import pickle
 from pathlib import Path
+import utils
 
 
 class SongDatabase:
@@ -15,32 +16,47 @@ class SongDatabase:
         # songs contains a list of songs
         self.songs = []
 
-    def store_fingerprint(self, fp_list, song_name):
+    def store_song(self, song_name, recording_method):
         """
-        takes a list of fingerprints of a song and the song's ID, adds the prints and ID to database
+        takes a song, generates the fingerprints, adds all this to the respective dict/list
         Parameters
         ----------
-            fp_list : List[Tuple(float, float, float)]
-                list of freq of initial peak, freq of peak fanned out to, time gap between peaks
             song_name : str
                 name of song the fingerprints are taken from
+            recording_method : int (1, 2)
+                user's choice for method of recording; 1 for mic, 2 for mp3
         """
         self.songs.append(song_name)
         song_id = self.songs.index(song_name)
 
-        for (fm, fn, dt), tm in fp_list:
+        if recording_method == 1:
+            time = input("Enter the length of the song")
+            audio = utils.mic_to_samples(time)
+        else:
+            path = input("Enter the path of the mp3 file")
+            audio = utils.mp3_to_samples(path)
+
+        spectogram = utils.audio_to_spectrogram(44100, audio)
+        threshhold = utils.threshold_value(spectogram)
+        temp_neighborhood = generate_binary_structure(2, 1)
+        neighborhood = iterate_structure(temp_neighborhood, 3)
+        local_peaks = utils.local_peak_locations(spectogram, )
+        fanout_num = 15
+        fingerprints = utils.generate_fingerprint(local_peaks, fanout_num)
+
+        for (fm, fn, dt), tm in fingerprints:
             if (fm, fn, dt) not in self.fingerprints:
                 self.fingerprints[(fm, fn, dt)] = [(song_id, tm)]
             else:
                 self.fingerprints[(fm, fn, dt)].append((song_id, tm))
 
-    def query_fingerprint(self, fingerprint):
+    def query_song(self, recording_method):
         """
         takes a fingerprint (f1, f2, relative_time), matches to database key and tallies which song has highest tally
         Parameters
         ----------
-            fingerprint : Tuple(float, float, float)
-                freq of initial peak, freq of peak fanned out to, time gap between peaks
+            recording_method : int (1, 2)
+                user's choice for method of recording; 1 for mic, 2 for mp3
         Returns
         -------
             song_ID : str
@@ -48,6 +64,21 @@ class SongDatabase:
         """
         threshold_success = 50  # song must have at least 50 tallies to be a success
         threshold_percentage = 0.75  # song must have 75% of total tallies
+
+        if recording_method == 1:
+            time = input("Enter the length of the song")
+            audio = utils.mic_to_samples(time)
+        else:
+            path = input("Enter the path of the mp3 file")
+            audio = utils.mp3_to_samples(path)
+
+        spectogram = utils.audio_to_spectrogram(44100, audio)
+        threshhold = utils.threshold_value(spectogram)
+        temp_neighborhood = generate_binary_structure(2, 1)
+        neighborhood = iterate_structure(temp_neighborhood, 3)
+        local_peaks = utils.local_peak_locations(spectogram, )
+        fanout_num = 15
+        fingerprints = utils.generate_fingerprint(local_peaks, fanout_num)
 
         t_rel = fingerprint[-1]
 
