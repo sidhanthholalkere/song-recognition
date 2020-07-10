@@ -1,3 +1,5 @@
+import pickle
+
 # a SongDatabase has a dictionary called fingerprints, and a list of songs.
 # fingerprints stores fingerprint as key and song ID as the value
 # the song ID corresponds to a song in the song list
@@ -65,3 +67,19 @@ def query_fingerprint(fingerprint):
             return song_database.songs[sorted_tally[0][0][0]]
    
     return 'not in database or did not meet threshold of a successful classification'
+
+def load_database(path):
+    """
+    takes in the path of the database, and returns loaded database
+    ----------
+        path: String
+            The path of the database
+    Returns
+    -------
+        database : Dict
+            ID of song with the highest tally (most closely matches fingerprint)
+    """
+    # loads dictionary/database of songs
+    database = pickle.load(open(path, "rb"))
+
+    return database
