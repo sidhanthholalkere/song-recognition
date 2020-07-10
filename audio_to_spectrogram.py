@@ -19,12 +19,15 @@ def audio_to_spectogram(sampling_rate, audio):
 
 
     """
+    turns audio into spectograph
+
+    Parameters
     ----------
     sampling_rate : int, 
     the sampling rate
 
     audio : np.array
-    the audio from the microphone
+    the audio samples
 
 
     Returns
@@ -37,9 +40,5 @@ def audio_to_spectogram(sampling_rate, audio):
 
     midpoint_times : 1-D array
     correspinding times of the middle of each window
-
-    Examples
-    --------
-    
     
     """
