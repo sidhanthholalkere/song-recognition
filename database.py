@@ -121,5 +121,5 @@ class SongDatabase:
             filename: String
                 the name of the file
         """
-        file = open(filename, 'w')
+        file = open(filename, 'wb')
         pickle.dump(self, file)
