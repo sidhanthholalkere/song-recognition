@@ -74,10 +74,7 @@ class SongDatabase:
                 poss_songs = self.fingerprints[(fm, fn, dt)]
                 for song_id, t_abs in poss_songs:
                     t_offset = t_abs - t_rel
-                    if (song_id, t_offset) in tally:
-                        tally[(song_id, t_offset)] += 1
-                    else:
-                        tally[(song_id, t_offset)] = 1
+                    tally[(song_id, t_offset)] = tally.get((song_id, t_offset), 0) + 1
             else:
                 return 'not in database'
 
@@ -86,12 +83,10 @@ class SongDatabase:
         # pass this to self.songs to retrieve the song name
         sorted_tally = sorted(tally.items(), key=lambda kv: kv[1], reverse=True)
         total_tallies = sum(tally.values())
-        #print(total_tallies)
         greatest_tally = sorted_tally[0][-1]
-        #print(greatest_tally)
-        #print(greatest_tally/total_tallies)
-        #print(greatest_tally/total_tallies >= threshold_percentage)
-        if greatest_tally >= threshold_success and greatest_tally / total_tallies >= threshold_percentage:
+        second_greatest_tally = sorted_tally[1][-1]
+
+        if greatest_tally >= threshold_success and greatest_tally > second_greatest_tally * 10:
             return self.songs[sorted_tally[0][0][0]]
         else:
             return 'did not meet threshold of successful classification'
@@ -110,7 +105,7 @@ class SongDatabase:
         # loads dictionary/database of songs
         path = Path(path)
         if path.is_file():
-            return pickle.load(open(path, "rb"))
+            self.fingerprints = pickle.load(open(path, "rb"))
         else:
             return 'file does not exist'
 
