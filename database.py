@@ -1,4 +1,5 @@
 import pickle
+from pathlib import Path
 
 
 class SongDatabase:
@@ -82,7 +83,11 @@ class SongDatabase:
                 ID of song with the highest tally (most closely matches fingerprint)
         """
         # loads dictionary/database of songs
-        return pickle.load(open(path, "rb"))
+        path = Path(path)
+        if path.is_file():
+            return pickle.load(open(path, "rb"))
+        else:
+            return 'file does not exist'
 
     def save_database(self, filename):
         """
