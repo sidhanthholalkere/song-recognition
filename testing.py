@@ -94,3 +94,33 @@ def fourier_complex_to_real(complex_coeffs, N):
 def test_from_mic(time, random_noise, random_slice):
 
     song_samples = mic_to_samples(time)
+
+    if (random_noise):
+        fourier = np.fft.rfft(song_samples)
+        
+
+        amps, phases = fourier_complex_to_real(fourier, fourier.shape[0])
+    
+        noise = np.random.normal(0, amps, fourier.shape)
+
+                        
+        song_samples = np.fft.irfft(np.add(fourier, noise))
+        
+    
+        if (random_slice):
+            index = np.random.random_sample() * (song_samples.shape[0]-2)
+            index = round(index)
+
+        
+            random = np.random.random_sample()
+        
+            size_slice = random * (song_samples.shape[0]-index)
+
+        
+            size_slice = round(size_slice)
+        
+
+        
+            return(song_samples[index:index+size_slice])
+        else:
+            return song_samples
