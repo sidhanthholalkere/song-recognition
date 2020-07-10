@@ -208,8 +208,8 @@ def generate_fingerprint(peaks, fanout_num):
 
     Return
     ------
-    fingerprint : List[Tuple(float, float, float)]
-        (freq of initial peak, freq of peak fanned out to, time elapsed between peaks
+    fingerprint : List[Tuple(Tuple(float, float, float), float)]
+        ((freq of initial peak, freq of peak fanned out to, time elapsed between peaks), absolute time of first peak)
     """
     fingerprint = []
     for index in range(len(peaks) - 1):
@@ -234,7 +234,7 @@ def spectogram_to_fingerprint(audio):
     spectrogram, frequency, midpoint = audio_to_spectrogram(44100, audio)
     threshhold = threshold_value(spectrogram)
     temp_neighborhood = generate_binary_structure(2, 1)
-    neighborhood = iterate_structure(temp_neighborhood, 3)
+    neighborhood = iterate_structure(temp_neighborhood, 20)
     local_peaks = local_peak_locations(spectrogram, neighborhood, threshhold)
     fanout_num = 15
     fingerprints = generate_fingerprint(local_peaks, fanout_num)
