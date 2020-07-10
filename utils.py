@@ -4,6 +4,8 @@ import matplotlib.mlab as mlab
 from pathlib import Path
 from microphone import record_audio
 from numba import njit
+from scipy.ndimage.morphology import generate_binary_structure
+from scipy.ndimage.morphology import iterate_structure
 
 
 SAMPLING_RATE = 44100
@@ -193,7 +195,7 @@ def local_peak_locations(data_2d, neighborhood, amp_min):
     
     return _peaks(data_2d, rows, cols, amp_min=amp_min)
 
-def generate_fingerprint(peaks, fanout_num=15):
+def generate_fingerprint(peaks, fanout_num):
     """Generates a fingerprint based off a spectograms peaks
 
     Parameters
@@ -210,7 +212,30 @@ def generate_fingerprint(peaks, fanout_num=15):
         (freq of initial peak, freq of peak fanned out to, time elapsed between peaks
     """
     fingerprint = []
-    for index in range(len(peaks) - fanout_num):
+    for index in range(len(peaks) - 1):
         for i in range(fanout_num):
-            fingerprint.append(peaks[index, 0], peaks[index + i, 0], peaks[index + i, 1] - peaks[index, 1])
+            if index+i+1<len(peaks):
+                fingerprint.append((peaks[index][0], peaks[index + i + 1][0], peaks[index + i + 1][1] - peaks[index][1]))
     return fingerprint
+
+def spectogram_to_fingerprint(audio):
+    """
+    Puts the rest of the functions together
+    Parameters
+    ----------
+    audio : audio samples from either microphone or mp3
+
+    Returns
+    -------
+    fingerprint: List[Tuple(float, float, float)]
+        list of fingerprints for the song
+
+    """
+    spectogram, frequency, midpoint = audio_to_spectogram(44100, audio)
+    threshhold = threshold_value(spectogram)
+    temp_neighborhood = generate_binary_structure(2, 1)
+    neighborhood = iterate_structure(temp_neighborhood, 3)
+    local_peaks = local_peak_locations(spectogram, neighborhood, threshhold)
+    fanout_num = 15
+    fingerprints = generate_fingerprint(local_peaks, fanout_num)
+    return fingerprints
