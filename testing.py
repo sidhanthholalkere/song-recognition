@@ -18,7 +18,7 @@ def test_mp3(path, random_noise=False, random_slice=False, amt=1):
         
     
         if (random_slice):
-            index = np.random.random_sample() * (song_samples.shape[0]-2)
+            index = np.random.random_sample() * (song_samples.shape[0]-2) #index is random number
             index = round(index)
 
         
