@@ -2,7 +2,6 @@ import librosa
 import numpy as np
 from pathlib import Path
 from microphone import record_audio
-from sklearn.preprocessing import MinMaxScaler
 
 SAMPLING_RATE = 44100
 
@@ -23,10 +22,8 @@ def mp3_to_samples(path):
     path = Path(path)
     
     recorded_audio, _ = librosa.load(path, sr=SAMPLING_RATE, mono=True)
-
-    scaler = MinMaxScaler(feature_range=(-2**15, 2**15))
     
-    return scaler.fit_transform(recorded_audio)
+    return recorded_audio * 2**15
 
 def mic_to_samples(time):
     """Converts audio from micropgone input into samples
@@ -46,6 +43,4 @@ def mic_to_samples(time):
 
     recorded_audio = np.hstack([np.frombuffer(i, np.int16) for i in frames])
 
-    scaler = MinMaxScaler(feature_range=(-2**15, 2**15))
-
-    return scaler.fit_transform(recorded_audio)
+    return recorded_audio
