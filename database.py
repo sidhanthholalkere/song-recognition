@@ -85,7 +85,10 @@ class SongDatabase:
         sorted_tally = sorted(tally.items(), key=lambda kv: kv[1], reverse=True)
         total_tallies = sum(tally.values())
         greatest_tally = sorted_tally[0][-1]
+        print(greatest_tally)
         second_greatest_tally = sorted_tally[1][-1]
+        print(second_greatest_tally)
+        print(sorted_tally[:10])
 
         if greatest_tally >= threshold_success and greatest_tally > second_greatest_tally * 10:
             return self.songs[sorted_tally[0][0][0]]
@@ -105,10 +108,10 @@ class SongDatabase:
         """
         # loads dictionary/database of songs
         path = Path(path)
-        if path.is_file():
-            self.fingerprints = pickle.load(open(path, "rb"))
-        else:
-            return 'file does not exist'
+        with open(path, mode="rb") as opened_file:
+            return pickle.load(opened_file)
+
+        return 'file does not exist'
 
     def save_database(self, filename):
         """
@@ -117,5 +120,8 @@ class SongDatabase:
             filename: String
                 the name of the file
         """
-        file = open(filename, 'wb')
-        pickle.dump(self, file)
+        with open(filename, mode="wb") as opened_file:
+            return pickle.dump(self, opened_file)
+
+        #file = open(filename, 'wb')
+        #pickle.dump(self, file)
