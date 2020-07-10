@@ -2,7 +2,6 @@ import librosa
 import numpy as np
 from pathlib import Path
 from microphone import record_audio
-from sklearn.preprocessing import MinMaxScaler
 
 SAMPLING_RATE = 44100
 
