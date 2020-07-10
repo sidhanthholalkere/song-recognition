@@ -195,7 +195,7 @@ def local_peak_locations(data_2d, neighborhood, amp_min):
     
     return _peaks(data_2d, rows, cols, amp_min=amp_min)
 
-def generate_fingerprint(peaks, fanout_num=15):
+def generate_fingerprint(peaks, fanout_num):
     """Generates a fingerprint based off a spectograms peaks
 
     Parameters
@@ -215,7 +215,7 @@ def generate_fingerprint(peaks, fanout_num=15):
     for index in range(len(peaks) - 1):
         for i in range(fanout_num):
             if index+i+1<len(peaks):
-                fingerprint.append((peaks[index, 0], peaks[index + i + 1, 0], peaks[index + i + 1, 1] - peaks[index, 1]))
+                fingerprint.append((peaks[index][0], peaks[index + i + 1][0], peaks[index + i + 1][1] - peaks[index][1]))
     return fingerprint
 
 def spectogram_to_fingerprint(audio):
@@ -239,4 +239,3 @@ def spectogram_to_fingerprint(audio):
     fanout_num = 15
     fingerprints = generate_fingerprint(local_peaks, fanout_num)
     return fingerprints
-    
