@@ -48,7 +48,7 @@ def mic_to_samples(time):
 
     return recorded_audio
 
-def audio_to_spectogram(sampling_rate, audio):
+def audio_to_spectrogram(sampling_rate, audio):
     """Converts audio samples to a spectogram
     Parameters
     ----------
