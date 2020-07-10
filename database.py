@@ -11,3 +11,15 @@ class SongDatabase:
         # songs contains a list of songs
         self.songs = []
 
+    def add_song(self):
+        raise NotImplementedError
+
+    def store(self):
+        raise NotImplementedError
+
+    def load(self):
+        raise NotImplementedError
+
+    def identify_song(self):
+        raise NotImplementedError
+

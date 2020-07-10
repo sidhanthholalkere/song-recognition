@@ -1,6 +1,6 @@
 # %%
 
-def generate_fingerprint(peaks, fanout_num):
+def generate_fingerprint(peaks, fanout_num=15):
     """
 
     Parameters:
