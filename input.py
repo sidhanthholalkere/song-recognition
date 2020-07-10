@@ -26,7 +26,7 @@ def mp3_to_samples(path):
 
     scaler = MinMaxScaler(feature_range=(-2**15, 2**15))
     
-    return scaler.fit_transform(recorded_audio)
+    return scaler.fit_transform(recorded_audio.reshape(-1, 1))
 
 def mic_to_samples(time):
     """Converts audio from micropgone input into samples
@@ -48,4 +48,4 @@ def mic_to_samples(time):
 
     scaler = MinMaxScaler(feature_range=(-2**15, 2**15))
 
-    return scaler.fit_transform(recorded_audio)
+    return scaler.fit_transform(recorded_audio.reshape(-1, 1))
