@@ -31,12 +31,13 @@ class SongDatabase:
 
         if recording_method == 1:
             time = input("Enter the length of the song")
+            time = int(time)
             audio = utils.mic_to_samples(time)
         else:
             path = input("Enter the path of the mp3 file")
             audio = utils.mp3_to_samples(path)
 
-        fingerprints = utils.spectogram_to_fingerprint(audio)
+        fingerprints = utils.spectrogram_to_fingerprint(audio)
 
         for (fm, fn, dt), t_abs in fingerprints:
             if (fm, fn, dt) not in self.fingerprints:
@@ -66,7 +67,7 @@ class SongDatabase:
             path = input("Enter the path of the mp3 file")
             audio = utils.mp3_to_samples(path)
 
-        q_fingerprints = utils.spectogram_to_fingerprint(audio)
+        q_fingerprints = utils.spectrogram_to_fingerprint(audio)
         tally = dict()
 
         for (fm, fn, dt), t_rel in q_fingerprints:
