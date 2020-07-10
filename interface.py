@@ -1,6 +1,3 @@
-from scipy.ndimage.filters import maximum_filter
-from scipy.ndimage.morphology import generate_binary_structure, binary_erosion
-from scipy.ndimage.morphology import iterate_structure
 import utils
 import database
 
@@ -22,13 +19,7 @@ else:
     path = input("Enter the path of the mp3 file")
     audio = utils.mp3_to_samples(path)
 
-spectogram, frequency, midpoint = utils.audio_to_spectogram(44100, audio)
-threshhold = utils.threshold_value(spectogram)
-temp_neighborhood = generate_binary_structure(2, 1)
-neighborhood = iterate_structure(temp_neighborhood, 3)
-local_peaks = utils.local_peak_locations(spectogram, neighborhood, threshhold)
-fanout_num=15
-fingerprints = utils.generate_fingerprint(local_peaks, fanout_num)
+fingerprints = utils.spectogram_to_fingerprint(audio)
 
 if user_choice == 1:
     database.SongDatabase.store_fingerprint(fingerprints, song_name)
