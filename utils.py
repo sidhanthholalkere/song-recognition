@@ -231,11 +231,11 @@ def spectogram_to_fingerprint(audio):
         list of fingerprints for the song
 
     """
-    spectogram, frequency, midpoint = audio_to_spectogram(44100, audio)
-    threshhold = threshold_value(spectogram)
+    spectrogram, frequency, midpoint = audio_to_spectrogram(44100, audio)
+    threshhold = threshold_value(spectrogram)
     temp_neighborhood = generate_binary_structure(2, 1)
     neighborhood = iterate_structure(temp_neighborhood, 20)
-    local_peaks = local_peak_locations(spectogram, neighborhood, threshhold)
+    local_peaks = local_peak_locations(spectrogram, neighborhood, threshhold)
     fanout_num = 15
     fingerprints = generate_fingerprint(local_peaks, fanout_num)
     return fingerprints
