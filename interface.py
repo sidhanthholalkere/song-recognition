@@ -11,20 +11,10 @@ print("Use the mic or mp3")
 print("1: Use mic")
 method = input("2: Use mp3")
 
-
-if (method == 1):
-    time = input("Enter the length of the song")
-    audio = utils.mic_to_samples(int(time))
-else:
-    path = input("Enter the path of the mp3 file")
-    audio = utils.mp3_to_samples(path)
-
-fingerprints = utils.spectogram_to_fingerprint(audio)
-
 if user_choice == 1:
-    database.SongDatabase.store_fingerprint(fingerprints, song_name)
+    database.SongDatabase.store_song(song_name, method)
 elif user_choice == 2:
-    database.SongDatabase.query_fingerprint(fingerprints)
+    database.SongDatabase.query_song(method)
 
 
 # revised interface:
