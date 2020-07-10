@@ -1,6 +1,9 @@
 import numpy as np
 import random
 
+SAMPLING_RATE = 44100
+
+
 def test_mp3(path, random_noise=False, random_slice=False, amt=1):
 
     song_samples = mp3_to_samples(path)
@@ -23,14 +26,14 @@ def test_mp3(path, random_noise=False, random_slice=False, amt=1):
         
     
         if (random_slice):
-            index = random.uniform(0,song_samples.shape[0]-44100)
+            index = random.uniform(0,song_samples.shape[0]-SAMPLING_RATE)
             index = round(index)
 
                 
-            size_slice = random.uniform(index+44100, song_samples.shape[0])
+            size_slice = random.uniform(index+SAMPLING_RATE, song_samples.shape[0])
 
         
-            size_slice = round(size_slice-44100)
+            size_slice = round(size_slice-SAMPLING_RATE)
     
         
 
@@ -39,6 +42,23 @@ def test_mp3(path, random_noise=False, random_slice=False, amt=1):
         else:
             return song_samples
         #add random noise
+
+    elif (random_slice):
+            index = np.random.random_sample() * (song_samples.shape[0]-44100)
+            index = round(index)
+
+        
+            random = np.random.random_sample()
+        
+            size_slice = random * (song_samples.shape[0]-index)
+
+        
+            size_slice = round(size_slice)
+        
+        
+            return(song_samples[index:index+size_slice])
+    else:
+        return song_samples
 
 
 
@@ -114,14 +134,14 @@ def test_from_mic(time, random_noise, random_slice):
         
     
         if (random_slice):
-            index = random.uniform(0,song_samples.shape[0]-44100)
+            index = random.uniform(0,song_samples.shape[0]-SAMPLING_RATE)
             index = round(index)
 
                 
-            size_slice = random.uniform(index+44100, song_samples.shape[0])
+            size_slice = random.uniform(index+SAMPLING_RATE, song_samples.shape[0])
 
         
-            size_slice = round(size_slice-44100)
+            size_slice = round(size_slice-SAMPLING_RATE)
     
         
 
@@ -133,5 +153,22 @@ def test_from_mic(time, random_noise, random_slice):
             return(song_samples[index:index+size_slice])
         else:
             return song_samples
+
+    elif (random_slice):
+            index = np.random.random_sample() * (song_samples.shape[0]-44100)
+            index = round(index)
+
+        
+            random = np.random.random_sample()
+        
+            size_slice = random * (song_samples.shape[0]-index)
+
+        
+            size_slice = round(size_slice)
+        
+        
+            return(song_samples[index:index+size_slice])
+    else:
+        return song_samples
 
         
