@@ -215,7 +215,7 @@ def generate_fingerprint(peaks, fanout_num):
     for index in range(len(peaks) - 1):
         for i in range(fanout_num):
             if index+i+1<len(peaks):
-                fingerprint.append((peaks[index][0], peaks[index + i + 1][0], peaks[index + i + 1][1] - peaks[index][1]))
+                fingerprint.append(((peaks[index][0], peaks[index + i + 1][0], peaks[index + i + 1][1] - peaks[index][1]), peaks[index][1]))
     return fingerprint
 
 def spectogram_to_fingerprint(audio):
