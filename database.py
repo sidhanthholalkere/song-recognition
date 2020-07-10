@@ -36,13 +36,7 @@ class SongDatabase:
             path = input("Enter the path of the mp3 file")
             audio = utils.mp3_to_samples(path)
 
-        spectogram = utils.audio_to_spectrogram(44100, audio)
-        threshhold = utils.threshold_value(spectogram)
-        temp_neighborhood = generate_binary_structure(2, 1)
-        neighborhood = iterate_structure(temp_neighborhood, 3)
-        local_peaks = utils.local_peak_locations(spectogram, )
-        fanout_num = 15
-        fingerprints = utils.generate_fingerprint(local_peaks, fanout_num)
+        fingerprints = utils.spectogram_to_fingerprint(audio)
 
         for (fm, fn, dt), tm in fingerprints:
             if (fm, fn, dt) not in self.fingerprints:
