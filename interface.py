@@ -7,6 +7,7 @@ import database
 print("Add to song database or try to match song?")
 print("1: Add to song database")
 user_choice = input("2: Match Song")
+song_name = ""
 if user_choice == 1:
     song_name = input("Enter the song name")
 print("Use the mic or mp3")

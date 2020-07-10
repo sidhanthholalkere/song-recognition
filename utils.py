@@ -210,7 +210,8 @@ def generate_fingerprint(peaks, fanout_num=15):
         (freq of initial peak, freq of peak fanned out to, time elapsed between peaks
     """
     fingerprint = []
-    for index in range(len(peaks) - fanout_num):
+    for index in range(len(peaks) - 1):
         for i in range(fanout_num):
-            fingerprint.append((peaks[index, 0], peaks[index + i, 0], peaks[index + i, 1] - peaks[index, 1]))
+            if index+i+1<len(peaks):
+                fingerprint.append((peaks[index, 0], peaks[index + i + 1, 0], peaks[index + i + 1, 1] - peaks[index, 1]))
     return fingerprint
