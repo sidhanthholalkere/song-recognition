@@ -1,12 +1,7 @@
 from scipy.ndimage.filters import maximum_filter
 from scipy.ndimage.morphology import generate_binary_structure, binary_erosion
 from scipy.ndimage.morphology import iterate_structure
-import audio_to_spectrogram
-import database
-import fingerprint
-import finding_peaks
-#import (what we name the input file)
-import testing
+import utils
 
 print("Add to song database or try to match song?")
 print("1: Add to song database")
