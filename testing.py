@@ -1,4 +1,5 @@
 import numpy as np
+import random
 
 def test_mp3(path, random_noise=False, random_slice=False, amt=1):
 
@@ -18,23 +19,19 @@ def test_mp3(path, random_noise=False, random_slice=False, amt=1):
                         
         song_samples = np.fft.irfft(np.add(fourier, noise))
        
-        
-       
-        return song_samples
 
         
     
         if (random_slice):
-            index = np.random.random_sample() * (song_samples.shape[0]-2) #index is random number
+            index = random.uniform(0,song_samples.shape[0]-44100)
             index = round(index)
 
-        
-            random = np.random.random_sample()
-        
-            size_slice = random * (song_samples.shape[0]-index)
+                
+            size_slice = random.uniform(index+44100, song_samples.shape[0])
 
         
-            size_slice = round(size_slice)
+            size_slice = round(size_slice-44100)
+    
         
 
         
@@ -117,16 +114,19 @@ def test_from_mic(time, random_noise, random_slice):
         
     
         if (random_slice):
-            index = np.random.random_sample() * (song_samples.shape[0]-44100)
+            index = random.uniform(0,song_samples.shape[0]-44100)
             index = round(index)
 
-        
-            random = np.random.random_sample()
-        
-            size_slice = random * (song_samples.shape[0]-index)
+                
+            size_slice = random.uniform(index+44100, song_samples.shape[0])
 
         
-            size_slice = round(size_slice)
+            size_slice = round(size_slice-44100)
+    
+        
+
+        
+            return(song_samples[index:index+size_slice])
         
 
         
