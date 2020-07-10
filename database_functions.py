@@ -40,7 +40,11 @@ def query_fingerprint(fingerprint):
         song_ID : str
             ID of song with the highest tally (most closely matches fingerprint)
     """
+    threshold_success = 50 # song must have at least 50 tallies to be a success
+    threshold_percentage = 0.75 # song must have 75% of total tallies
+
     t_rel = fingerprint[-1]
+    
 
     if fingerprint in song_database.fingerprints:
         poss_songs = song_database.fingerprints[fingerprint]
@@ -55,6 +59,9 @@ def query_fingerprint(fingerprint):
         # sorted_tally[0[0]] gives the song ID of the song w greatest # of tallies
         # pass this to song_database.songs to retrieve the song name
         sorted_tally = sorted(tally.items(), key=lambda kv: kv[1], reverse=True)
-        return song_database.songs[sorted_tally[0[0]]]
-    else:
-        return 'not in database'
+        total_tallies = sum(tally.values)
+        greatest_tally = sorted_tally[0][-1]
+        if greatest_tally >= threshold_success and greatest_tally / total_tallies >= threshold_percentage:
+            return song_database.songs[sorted_tally[0][0][0]]
+   
+    return 'not in database or did not meet threshold of a successful classification'
