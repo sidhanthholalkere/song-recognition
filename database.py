@@ -38,15 +38,15 @@ class SongDatabase:
 
         fingerprints = utils.spectogram_to_fingerprint(audio)
 
-        for (fm, fn, dt), tm in fingerprints:
+        for (fm, fn, dt), t_abs in fingerprints:
             if (fm, fn, dt) not in self.fingerprints:
-                self.fingerprints[(fm, fn, dt)] = [(song_id, tm)]
+                self.fingerprints[(fm, fn, dt)] = [(song_id, t_abs)]
             else:
-                self.fingerprints[(fm, fn, dt)].append((song_id, tm))
+                self.fingerprints[(fm, fn, dt)].append((song_id, t_abs))
 
     def query_song(self, recording_method):
         """
-        takes a fingerprint (f1, f2, relative_time), matches to database key and tallies which song has highest tally
+        takes in recording_method (either mic or mp3), gets fingerprint sequence for the queried song, returns song name
         Parameters
         ----------
             recording_method : int (1, 2)
@@ -66,35 +66,31 @@ class SongDatabase:
             path = input("Enter the path of the mp3 file")
             audio = utils.mp3_to_samples(path)
 
-        spectogram = utils.audio_to_spectrogram(44100, audio)
-        threshhold = utils.threshold_value(spectogram)
-        temp_neighborhood = generate_binary_structure(2, 1)
-        neighborhood = iterate_structure(temp_neighborhood, 3)
-        local_peaks = utils.local_peak_locations(spectogram, )
-        fanout_num = 15
-        fingerprints = utils.generate_fingerprint(local_peaks, fanout_num)
+        q_fingerprints = utils.spectogram_to_fingerprint(audio)
+        tally = dict()
 
-        t_rel = fingerprint[-1]
+        for (fm, fn, dt), t_rel in q_fingerprints:
+            if (fm, fn, dt) in self.fingerprints:
+                poss_songs = self.fingerprints[(fm, fn, dt)]
+                for song_id, t_abs in poss_songs:
+                    t_offset = t_abs - t_rel
+                    if (song_id, t_offset) in tally:
+                        tally[(song_id, t_offset)] += 1
+                    else:
+                        tally[(song_id, t_offset)] = 1
+            else:
+                return 'not in database'
 
-        if fingerprint in self.fingerprints:
-            poss_songs = self.fingerprints[fingerprint]
-            tally = dict()
-            for song_id, t_abs in poss_songs:
-                t_offset = t_abs - t_rel
-                if (song_id, t_offset) in tally:
-                    tally[(song_id, t_offset)] += 1
-                else:
-                    tally[(song_id, t_offset)] = 1
-            # sorted_tally is a list of tuples in order of tallies, from greatest to least [( (songID, t_off), tally ), ...]
-            # sorted_tally[0[0]] gives the song ID of the song w greatest # of tallies
-            # pass this to self.songs to retrieve the song name
-            sorted_tally = sorted(tally.items(), key=lambda kv: kv[1], reverse=True)
-            total_tallies = sum(tally.values)
-            greatest_tally = sorted_tally[0][-1]
-            if greatest_tally >= threshold_success and greatest_tally / total_tallies >= threshold_percentage:
-                return self.songs[sorted_tally[0][0][0]]
-
-        return 'not in database or did not meet threshold of a successful classification'
+        # sorted_tally is a list of tuples in order of tallies, from greatest to least [( (songID, t_off), tally ), ...]
+        # sorted_tally[0][0][0] gives the song ID of the song w greatest # of tallies
+        # pass this to self.songs to retrieve the song name
+        sorted_tally = sorted(tally.items(), key=lambda kv: kv[1], reverse=True)
+        total_tallies = sum(tally.values)
+        greatest_tally = sorted_tally[0][-1]
+        if greatest_tally >= threshold_success and greatest_tally / total_tallies >= threshold_percentage:
+            return self.songs[sorted_tally[0][0][0]]
+        else:
+            return 'did not meet threshold of successful classification'
 
     def load_database(self, path):
         """
