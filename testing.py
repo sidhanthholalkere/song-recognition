@@ -11,10 +11,17 @@ def test_mp3(path, random_noise=False, random_slice=False, amt=1):
 
         amps, phases = fourier_complex_to_real(fourier, fourier.shape[0])
     
-        noise = np.random.normal(0, amps, fourier.shape)
+        amps = np.mean(song_samples)    
+    
+        noise = np.random.normal(amps, 200000, fourier.shape)
 
                         
         song_samples = np.fft.irfft(np.add(fourier, noise))
+       
+        
+       
+        return song_samples
+
         
     
         if (random_slice):
@@ -39,7 +46,7 @@ def test_mp3(path, random_noise=False, random_slice=False, amt=1):
 
 
     """
-    turns audio into spectograph
+    adds noise/cuts songs into pieces
 
     Parameters
     ----------
@@ -101,14 +108,16 @@ def test_from_mic(time, random_noise, random_slice):
 
         amps, phases = fourier_complex_to_real(fourier, fourier.shape[0])
     
-        noise = np.random.normal(0, amps, fourier.shape)
+        amps = np.mean(song_samples)    
+    
+        noise = np.random.normal(amps, 200000, fourier.shape)
 
                         
         song_samples = np.fft.irfft(np.add(fourier, noise))
         
     
         if (random_slice):
-            index = np.random.random_sample() * (song_samples.shape[0]-2)
+            index = np.random.random_sample() * (song_samples.shape[0]-44100)
             index = round(index)
 
         
@@ -124,3 +133,5 @@ def test_from_mic(time, random_noise, random_slice):
             return(song_samples[index:index+size_slice])
         else:
             return song_samples
+
+        
