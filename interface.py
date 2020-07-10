@@ -16,18 +16,18 @@ method = input("2: Use mp3")
 
 if (method == 1):
     time = input("Enter the length of the song")
-    audio = utils.mic_to_samples(time)
+    audio = utils.mic_to_samples(int(time))
 else:
     path = input("Enter the path of the mp3 file")
     audio = utils.mp3_to_samples(path)
 
-spectogram = utils.audio_to_spectrogram(44100, audio)
-threshhold = utils.threshhold_value(spectogram)
+spectogram, frequency, midpoint = utils.audio_to_spectogram(44100, audio)
+threshhold = utils.threshold_value(spectogram)
 temp_neighborhood = generate_binary_structure(2, 1)
 neighborhood = iterate_structure(temp_neighborhood, 3)
-local_peaks = utils.local_peak_locations(spectogram, )
+local_peaks = utils.local_peak_locations(spectogram, neighborhood, threshhold)
 fanout_num=15
-fingerprints = utils.fingerprint(local_peaks, fanout_num)
+fingerprints = utils.generate_fingerprint(local_peaks, fanout_num)
 
 if user_choice == 1:
     database.SongDatabase.store_fingerprint(fingerprints, song_name)

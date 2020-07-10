@@ -212,5 +212,5 @@ def generate_fingerprint(peaks, fanout_num=15):
     fingerprint = []
     for index in range(len(peaks) - fanout_num):
         for i in range(fanout_num):
-            fingerprint.append(peaks[index, 0], peaks[index + i, 0], peaks[index + i, 1] - peaks[index, 1])
+            fingerprint.append((peaks[index, 0], peaks[index + i, 0], peaks[index + i, 1] - peaks[index, 1]))
     return fingerprint
