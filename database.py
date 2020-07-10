@@ -85,8 +85,12 @@ class SongDatabase:
         # sorted_tally[0][0][0] gives the song ID of the song w greatest # of tallies
         # pass this to self.songs to retrieve the song name
         sorted_tally = sorted(tally.items(), key=lambda kv: kv[1], reverse=True)
-        total_tallies = sum(tally.values)
+        total_tallies = sum(tally.values())
+        #print(total_tallies)
         greatest_tally = sorted_tally[0][-1]
+        #print(greatest_tally)
+        #print(greatest_tally/total_tallies)
+        #print(greatest_tally/total_tallies >= threshold_percentage)
         if greatest_tally >= threshold_success and greatest_tally / total_tallies >= threshold_percentage:
             return self.songs[sorted_tally[0][0][0]]
         else:
@@ -119,4 +123,3 @@ class SongDatabase:
         """
         file = open(filename, 'w')
         pickle.dump(self, file)
-
