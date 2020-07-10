@@ -1,10 +1,10 @@
 import numpy as np
-import random
+import random as random
 
 SAMPLING_RATE = 44100
 
 
-def test_mp3(path, random_noise=False, random_slice=False, amt=1):
+def test_mp3(path, random_noise=False, random_slice=False):
 
     song_samples = mp3_to_samples(path)
 
@@ -13,7 +13,7 @@ def test_mp3(path, random_noise=False, random_slice=False, amt=1):
         fourier = np.fft.rfft(song_samples)
         
 
-        amps, phases = fourier_complex_to_real(fourier, fourier.shape[0])
+        #amps, phases = fourier_complex_to_real(fourier, fourier.shape[0])
     
         amps = np.mean(song_samples)    
     
@@ -44,7 +44,7 @@ def test_mp3(path, random_noise=False, random_slice=False, amt=1):
         #add random noise
 
     elif (random_slice):
-            index = np.random.random_sample() * (song_samples.shape[0]-44100)
+            index = np.random.random_sample() * (song_samples.shape[0]-SAMPLING_RATE)
             index = round(index)
 
         
@@ -63,7 +63,7 @@ def test_mp3(path, random_noise=False, random_slice=False, amt=1):
 
 
     """
-    adds noise/cuts songs into pieces
+    adds noise/cuts songs into pieces from a file
 
     Parameters
     ----------
@@ -117,13 +117,35 @@ def fourier_complex_to_real(complex_coeffs, N):
 
 def test_from_mic(time, random_noise, random_slice):
 
+    """
+    adds noise/cuts songs into pieces from mic
+
+    Parameters
+    ----------
+    time : int
+    amount of time you want to record
+
+    random_noise : boolean
+    True if want to apply random noise to function
+
+    random_slice : boolean
+    True if we wanr to take a random slice from the song
+
+    Returns
+    -------
+    
+    tranformed song : np.array
+    sampled of the song with noise/cut
+    
+"""
+
     song_samples = mic_to_samples(time)
 
     if (random_noise):
         fourier = np.fft.rfft(song_samples)
         
 
-        amps, phases = fourier_complex_to_real(fourier, fourier.shape[0])
+        #amps, phases = fourier_complex_to_real(fourier, fourier.shape[0])
     
         amps = np.mean(song_samples)    
     
