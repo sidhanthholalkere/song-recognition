@@ -51,7 +51,7 @@ def mic_to_samples(time):
     return recorded_audio
 
 def audio_to_spectrogram(sampling_rate, audio):
-    """Converts audio samples to a spectogram
+    """Converts audio samples to a spectrogram
     Parameters
     ----------
     sampling_rate : int, 
@@ -91,7 +91,7 @@ def threshold_value(data_2d, percentile=75):
     Parameters
     ----------
     data_2d: np.array
-        A spectogram
+        A spectrogram
 
     percentile: float
         Percentile to threshold by
@@ -218,7 +218,7 @@ def generate_fingerprint(peaks, fanout_num):
                 fingerprint.append(((peaks[index][0], peaks[index + i + 1][0], peaks[index + i + 1][1] - peaks[index][1]), index))
     return fingerprint
 
-def spectogram_to_fingerprint(audio):
+def spectrogram_to_fingerprint(audio):
     """
     Puts the rest of the functions together
     Parameters
